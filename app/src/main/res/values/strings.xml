@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">Bluetooth</string>
+    <!--蓝牙-->
+    <string name="scan_data">扫描数据:</string>
 </resources>
