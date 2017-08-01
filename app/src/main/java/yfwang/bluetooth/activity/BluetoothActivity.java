@@ -81,11 +81,11 @@ public class BluetoothActivity extends AppCompatActivity implements View.OnClick
 
         }  else if (event != null && event instanceof ConnectSuccessEvent) {
             dismissDialog();
-            Toast.makeText(BluetoothActivity.this, "连接成功!", Toast.LENGTH_SHORT).show();
+            Toast.makeText(BluetoothActivity.this, R.string.connected, Toast.LENGTH_SHORT).show();
 
         }  else if (event != null && event instanceof DisConnectedEvent) {
             dismissDialog();
-            Toast.makeText(BluetoothActivity.this, "连接断开!", Toast.LENGTH_SHORT).show();
+            Toast.makeText(BluetoothActivity.this, R.string.disconnect, Toast.LENGTH_SHORT).show();
         }
     }
 
