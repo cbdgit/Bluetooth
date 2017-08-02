@@ -45,8 +45,8 @@ import yfwang.bluetooth.eventbean.ScanEvent;
 @TargetApi(Build.VERSION_CODES.LOLLIPOP)
 public class BluetoothService extends Service {
 
-    //    private static final String UUID_SERVICE = "0000fff0-0000-1000-8000-00805f9b34fb";
-//    private static final String UUID_NOTIFY = "0000fff1-0000-1000-8000-00805f9b34fb";
+    private static final String UUID_SERVICE = "0000fff0-0000-1000-8000-00805f9b34fb";
+    private static final String UUID_NOTIFY = "0000fff1-0000-1000-8000-00805f9b34fb";
     private BluetoothAdapter bluetoothAdapter;
     private BluetoothLeScanner bluetoothLeScanner;
     public static BluetoothGatt bluetoothGatt;
@@ -56,15 +56,15 @@ public class BluetoothService extends Service {
     @Override
     public void onCreate() {
         EventBus.getDefault().register(this);
-        BluetoothManager bluetoothManager = (BluetoothManager) getSystemService(Context.BLUETOOTH_SERVICE);
-        bluetoothAdapter = bluetoothManager.getAdapter();
-        bluetoothAdapter.enable();
         //检查是否支持BLE4.0
         if (!isSupportBle()) {
             Toast.makeText(this, "您的设备不支持ble4.0", Toast.LENGTH_SHORT).show();
             stopSelf();
         }
 
+        BluetoothManager bluetoothManager = (BluetoothManager) getSystemService(Context.BLUETOOTH_SERVICE);
+        bluetoothAdapter = bluetoothManager.getAdapter();
+        bluetoothAdapter.enable();
 
     }
 
@@ -200,7 +200,7 @@ public class BluetoothService extends Service {
         @Override
         public void onServicesDiscovered(BluetoothGatt gatt, int status) {
 
-            List<BluetoothGattService> supportedGattServices = bluetoothGatt.getServices();
+          /*  List<BluetoothGattService> supportedGattServices = bluetoothGatt.getServices();
 
             for (BluetoothGattService supportedGattService : supportedGattServices) {
 
@@ -211,28 +211,18 @@ public class BluetoothService extends Service {
                         //具备通知属性
                         UUID bluetoothGattCharacteristicUuid = bluetoothGattCharacteristic.getUuid();
                         UUID supportedGattServiceUuid = supportedGattService.getUuid();
-
-                        BluetoothGattService service = bluetoothGatt.getService(supportedGattServiceUuid);
-                        BluetoothGattCharacteristic characteristic = service.getCharacteristic(bluetoothGattCharacteristicUuid);
-                        //接受Characteristic被写的通知,收到蓝牙模块的数据后会触发
-                        bluetoothGatt.setCharacteristicNotification(characteristic, true);
-                        //往蓝牙模块写入数据
-                        bluetoothGatt.writeCharacteristic(characteristic);
-                    }
+                      }
 
                 }
 
 
-            }
-/*
+            }*/
 
             BluetoothGattService service = bluetoothGatt.getService(UUID.fromString(UUID_SERVICE));
             BluetoothGattCharacteristic characteristic = service.getCharacteristic(UUID.fromString(UUID_NOTIFY));
             //接受Characteristic被写的通知,收到蓝牙模块的数据后会触发
             bluetoothGatt.setCharacteristicNotification(characteristic, true);
-            //往蓝牙模块写入数据
-            bluetoothGatt.writeCharacteristic(characteristic);
-*/
+
 
         }
 
@@ -240,7 +230,7 @@ public class BluetoothService extends Service {
         @Override
         public void onCharacteristicChanged(BluetoothGatt gatt, BluetoothGattCharacteristic characteristic) {
             final byte[] data = characteristic.getValue();
-            Log.e("yfwang", "读取成功" + new String(data));
+            Log.e("info", "读取成功" + new String(data));
             runOnMainThread(new Runnable() {
                 @Override
                 public void run() {
@@ -274,7 +264,7 @@ public class BluetoothService extends Service {
         if (bluetoothGatt != null) {
             bluetoothGatt.close();
         }
-        bluetoothGatt = device.connectGatt(this, false, gattCallback);
+        bluetoothGatt = device.connectGatt(this, true, gattCallback);
         return true;
 
 
